@@ -9,9 +9,9 @@ HrsInMonth=100;
 empRatePerHrs=20;
 NumberOfWorkingDays=20;
 
-function getWorking() {
+function getWorkingDays() {
 
-	case $randomCheck in
+	case $1 in
 		$fullTime)
 			empHrs=8;
                         ;;
@@ -24,14 +24,21 @@ function getWorking() {
 	esac
 	echo $empHrs;
 }
+
+function calDailyWage() {
+	local empHrs=$1
+	Wage=$(($empHrs*$empRatePerHrs))
+	echo $Wage
+}
+
 while [[ $totalempHrs -lt $HrsInMonth && $TotalWorkingDays -lt $NumberOfWorkingDays ]]
 do
 	((TotalWorkingDays++))
-	randomCheck=$((RANDOM%3));
-	empHrs="$( getWorking $randomCheck )"
-	totalempHrs=$(($totalempHrs+$empHrs));
+	empHrs="$( getWorkingDays $((RANDOM%3)) )"
+        totalempHrs=$(($totalempHrs+$empHrs))
+        empDailyWage["$totalworkingdays"]="$( calDailyWage $empHrs )"
 done
-totalSalary=$(($totalempHrs*$empRatePerHrs));
-echo "Employee Hours "$totalempHrs
-echo " Salary "$totalSalary
+
+totalSalary="$( calDailyWage $totalempHrs )"
+echo "Daily Wage " ${empDailyWage[@]}
 
